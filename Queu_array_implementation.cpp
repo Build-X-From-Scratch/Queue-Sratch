@@ -1,5 +1,7 @@
 #include <iostream>
 #include <cstddef>
+#include <queue>
+std::queue<int>s;
 /**
 * @brief Queu mempunya beberapa operasi dasar yaitu:
 *        -  enqueue adalah operasi untuk menambah element ke queue
@@ -13,17 +15,26 @@ class Array{
         std::size_t capacity;
         int size;
         type* arr;
+        type front;
+        type rear;
     public:
         //default constructor
         Array(){
             this->capacity = 1;
             this->size = 0;
+            this->front = 0;
+            this->rear = -1; 
             this->arr = new type[capacity];
         }
         //Constructor
         Array(std::size_t capacity){
+            if(capacity <= 0){
+                throw std::invalid_argument("capasitas harus lebih dari 0");
+            }
             this->capacity = capacity;
             this->size = 0;
+            this->front = 0;
+            this->rear = -1;
             this->arr = new type[capacity];
         }
         //copy constructor
@@ -68,28 +79,40 @@ class Array{
             }
             return false;
         }
-        type getFront()const noexcept{
-            return this->arr[0];
-        }
-        type getRear()const noexcept{
+        void back()const noexcept{
             return this->arr[size - 1];
         }
     public: //abstraksi setter
         void enqueu(const type& data){
-            arr[size] = data;
+            if(size == capacity){
+                throw std::runtime_error("queue telah terisi penuh");
+            }
+            rear = (rear + 1) % capacity;
+            arr[rear] = data;
             size++;
         }
-        void dequeu(){
-            for(size_t i = 1;i < size;i--){
-                arr[i - 1] = arr[i];
-                //menggeser arr[0] menjadi element terakhir
+        type dequeu(){
+            if(is_empty()){
+                throw std::runtime_error("Qeueu is full");
             }
+            int val = arr[front];
+            front = (front + 1) % capacity; 
             size--;
+            return val;
         }
     public: //abstraksi dynamic array
         void grow_array()noexcept{
             type* temp = new type[capacity * 2];
             capacity *= 2;
+            for(size_t i = 0;i < size;i++){
+                temp[i] = arr[i];
+            }
+            delete[] arr;
+            arr = temp;
+        }
+        void shrink_array(){
+            type* temp = new type[capacity/2];
+            capacity /= 2;
             for(size_t i = 0;i < size;i++){
                 temp[i] = arr[i];
             }
@@ -113,6 +136,12 @@ class Array{
 
 };
 int main(){
+    Array<int>Qeueu1(100);  
+    Qeueu1.enqueu(1);
+    Qeueu1.enqueu(2);
+    Qeueu1.enqueu(3);
+    Qeueu1.enqueu(4);
+    Qeueu1.print();
     // Your code here
     return 0;
 }
