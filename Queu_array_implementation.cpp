@@ -1,13 +1,14 @@
 #include <iostream>
 #include <cstddef>
-#include <queue>
-std::queue<int>s;
 /**
 * @brief Queu mempunya beberapa operasi dasar yaitu:
 *        -  enqueue adalah operasi untuk menambah element ke queue
 *        -  dequeu adalah operasi untuk menghapus element dari queue
 *        -  getFront/peek mengambil element paling depan tanpa menghapus
 *        -  gerRear mengambil elemnt paling belakang tanpa menghapus
+*@details program ini memakai konsep circular array untuk mengimplementasikan
+*Queue,dengan circular array kita tidak perlu lagi melakukan beberapa operasi
+*seperti deleting at beginning yg membutuhkan O(n) time complexity.
 */
 template <typename type>
 class Array{
@@ -40,8 +41,11 @@ class Array{
         //copy constructor
         Array(const Array& other){
             size = other.size;
-            arr = new type[capacity];
-            for(int i = 0;i < size;i++){
+            capacity = other.capacity;
+            front = other.front;
+            rear = other.rear;
+            arr = new type[capacity]; //alokasi ulang array
+            for(size_t i = front;i < rear + 1;i++){
                 arr[i] = other.arr[i];
             }
         }
@@ -50,7 +54,7 @@ class Array{
             if(this != &other){ //objeck saat ini tidak sama dengan objek yg ingin copy
                 size = other.size;
                 arr = new type[capacity];
-                for(size_t i = 0;i < size;i++){
+                for(size_t i = front;i < rear + 1;i++){
                     arr[i] = other.arr[i];
                 }
             }
@@ -79,8 +83,11 @@ class Array{
             }
             return false;
         }
-        void back()const noexcept{
-            return this->arr[size - 1];
+        void get_back()const noexcept{
+            return this->arr[rear];
+        }
+        void get_front()const noexcept{
+            return this->arr[front];
         }
     public: //abstraksi setter
         void enqueu(const type& data){
@@ -95,7 +102,7 @@ class Array{
             if(is_empty()){
                 throw std::runtime_error("Qeueu is full");
             }
-            int val = arr[front];
+            int val = arr[front];   
             front = (front + 1) % capacity; 
             size--;
             return val;
@@ -103,16 +110,16 @@ class Array{
     public: //abstraksi dynamic array
         void grow_array()noexcept{
             type* temp = new type[capacity * 2];
-            capacity *= 2;
+            capacity = capacity * 2;
             for(size_t i = 0;i < size;i++){
                 temp[i] = arr[i];
             }
             delete[] arr;
             arr = temp;
         }
-        void shrink_array(){
-            type* temp = new type[capacity/2];
-            capacity /= 2;
+        void shrink_array()noexcept{
+            capacity = size;
+            type* temp = new type[capacity];
             for(size_t i = 0;i < size;i++){
                 temp[i] = arr[i];
             }
@@ -128,12 +135,11 @@ class Array{
             size = 0;
         }
         void print()const noexcept{
-            for(size_t i = 0;i < size;i++){
+            for(size_t i = front;i < rear + 1;i++){
                 std::cout << arr[i] <<  " ";
             }
             std::cout << std::endl;
         }
-
 };
 int main(){
     Array<int>Qeueu1(100);  
@@ -141,7 +147,15 @@ int main(){
     Qeueu1.enqueu(2);
     Qeueu1.enqueu(3);
     Qeueu1.enqueu(4);
+    std::cout << "Proses enqueue" << std::endl;
     Qeueu1.print();
+    std::cout << "proses Dequeue" << std::endl;
+    Qeueu1.dequeu();
+    Qeueu1.print();
+    //copy constructor
+     Array<int>Qeueu2 = Qeueu1;
+     std::cout << "Proses Copy Constructor" << std::endl;
+     Qeueu2.print();
     // Your code here
     return 0;
 }
