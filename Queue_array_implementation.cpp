@@ -54,6 +54,8 @@ class Array{
             if(this != &other){ //objeck saat ini tidak sama dengan objek yg ingin copy
                 size = other.size;
                 arr = new type[capacity];
+                front = other.front;
+                rear = other.rear;
                 for(size_t i = front;i < rear + 1;i++){
                     arr[i] = other.arr[i];
                 }
@@ -83,10 +85,10 @@ class Array{
             }
             return false;
         }
-        void get_back()const noexcept{
+        type get_back()const noexcept{
             return this->arr[rear];
         }
-        void get_front()const noexcept{
+        type get_front()const noexcept{
             return this->arr[front];
         }
     public: //abstraksi setter
@@ -156,6 +158,14 @@ int main(){
      Array<int>Qeueu2 = Qeueu1;
      std::cout << "Proses Copy Constructor" << std::endl;
      Qeueu2.print();
+     std::cout << "Proses Copy Assignment" << std::endl;
+     Array<int>Queue3 = Qeueu2; //chaining
+     Queue3.print();
+     std::cout << "Testing getter" << std::endl;
+     std::cout << "ini front: " << Qeueu1.get_front() << std::endl;
+     std::cout << "ini rear: " << Qeueu1.get_back() << std::endl;
+     std::cout << "ini capacity: " << Qeueu1.get_capacity() << std::endl;
+     std::cout << "ini size: " << Qeueu1.get_size() << std::endl;
     // Your code here
     return 0;
 }
