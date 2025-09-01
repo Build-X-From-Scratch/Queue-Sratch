@@ -13,6 +13,9 @@ cmake_install.cmake
 compile_commands.json
 CTestTestfile.cmake
 Testing/
+
+#compile
+m
 # Compiled Object files
 *.slo
 *.lo
