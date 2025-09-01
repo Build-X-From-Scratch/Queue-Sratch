@@ -7,10 +7,17 @@
  * 
  * @details aturan matematika index = (index + 1) % capacity;
  * ketika index + 1 > capacity maka hasil operasi tersebut kembali menjadi 0
+ * 
+ * operasi deletion yang paling optimal pada circular array adalah lazy deletion
+ * dengan time complexity O(n)
+ * sementara itu untuk deletion operation yang worst dinamakan eager deletion yaitu
+ * dengan mencopy element yang dihapus kekanan dengan time complexity O(n)
  */
 void circular_array(int (&arr)[5],int& size,int pos){
     int val = (pos + 1) % size;
     std::cout << val << std::endl;
+    //deletion operation using lazy deletion
+    
 }
 int main(){
     int arr[5] = {1,2,3,4,5};
