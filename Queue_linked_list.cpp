@@ -24,6 +24,40 @@ class Linked_list{
             this->front = nullptr;
             this->rear = nullptr;
         }
+        //copy constructor
+        Linked_list(const Linked_list& obj){
+            if(is_first()){
+                return;
+            }
+            front = new Node(obj.front->data);
+            Node* curr = front;
+            Node* temp = obj.front->next;
+            while(temp != nullptr){
+                curr->next = new Node(temp->data);
+                curr = curr->next;
+                temp = temp->next;
+            }
+            //curr = new Node(obj.rear->data);
+        }
+        //copy assignment
+        Linked_list& operator=(const Linked_list &obj){
+            if(this == &obj){
+                return *this;//return objeck saat ini
+            }
+            clear(); //hapus semua isi object saat ini
+            if(!obj.front){ //jika object yang ingin di copy is empty
+                return nullptr;
+            }
+            front = new Node(obj.front->data);
+            Node* curr = front;
+            Node* temp = obj.front->next;
+            while(temp != nullptr){
+                curr->next = new Node(temp->data);
+                curr = curr->next;
+                temp = temp->next;
+            }
+            return *this;
+        }
         ~Linked_list(){
             clear();
         }
@@ -118,7 +152,7 @@ class Linked_list{
                     std::cout << curr->data << " ";
                     curr = curr->next;
                 }
-                std::cout << std::endl;
+                std::cout << std::endl; 
             }
         }
 };
@@ -127,6 +161,8 @@ int main(){
     Queue1.enqueue(1);
     Queue1.enqueue(2);
     Queue1.enqueue(3);
+    Queue1.enqueue(4);
+    Queue1.enqueue(5);
     Queue1.print();
     std::cout << "ini front: " << Queue1.get_front() << std::endl;
     std::cout << "ini rear: " << Queue1.get_peek() << std::endl;
@@ -134,8 +170,14 @@ int main(){
     std::cout << "ini proses dequeue "<< std::endl;
     Queue1.dequeue();
     Queue1.dequeue();
-    Queue1.dequeue();
+    // Queue1.dequeue();
     Queue1.print();
+    std::cout << "proses copy constructor" << std::endl;
+    Linked_list<int>Queue2 = Queue1; //copy constructor
+    Queue2.print();
+    std::cout << "Proses Copy Assinment" << std::endl;
+    Linked_list<int>Queue3 = Queue2;
+    Queue3.print();
     // Your code here
     std::cin.get();
     return 0;
