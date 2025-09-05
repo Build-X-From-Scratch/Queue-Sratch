@@ -1,6 +1,8 @@
 #include <iostream>
 #include <string>
 #include <stdexcept>
+#include <iomanip>
+static int counter = 0;
 class Bank{
     private:
         int size;
@@ -73,6 +75,7 @@ class Bank{
             arr[rear] = nama;
             data++;
             size++;
+            counter++;
             return {get_top_nama(),get_top_pid()};
         }   
         Information dequeue(){ //hapus/proses antrian
@@ -92,10 +95,15 @@ class Bank{
         void tambah_antrian(const std::string nama){
             // enqueue(nama);
             Information res = enqueue(nama);;
-            std::cout << "Antrian sedang di tambahkan dengan nama: " << res.nama << " dan id antrian: " << res.pid << std::endl;
+            static bool printed = false;
+            if(!printed){
+                std::cout << "Nomor antrian" << std::setw(10) << "nama" << std::setw(20) << "Id Proses" << std::endl;
+                printed = true;
+            }
+            //std::cout << "Antrian sedang di tambahkan dengan nama: " << res.nama << " dan id antrian: " << res.pid << std::endl;
+            std::cout << counter << std::setw(21) << res.nama << std::setw(20) << res.pid << std::endl;
         }
         void proses_antrian(){
-            dequeue();
             Information res = dequeue();
             std::cout << "Proses selesai dengan:" << std::endl;
             std::cout << "nama: " << res.nama << std::endl;
