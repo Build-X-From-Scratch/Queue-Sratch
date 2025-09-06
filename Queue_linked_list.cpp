@@ -26,17 +26,19 @@ class Linked_list{
         }
         //copy constructor
         Linked_list(const Linked_list& obj){
-            if(is_first()){
-                return;
+            if(obj.front == nullptr){
+                return ;
             }
             front = new Node(obj.front->data);
             Node* curr = front;
             Node* temp = obj.front->next;
+            size = obj.size;
             while(temp != nullptr){
                 curr->next = new Node(temp->data);
                 curr = curr->next;
                 temp = temp->next;
             }
+            rear = curr;
             //curr = new Node(obj.rear->data);
         }
         //copy assignment
@@ -44,8 +46,10 @@ class Linked_list{
             if(this == &obj){
                 return *this;//return objeck saat ini
             }
+            size = obj.size;
             clear(); //hapus semua isi object saat ini
             if(!obj.front){ //jika object yang ingin di copy is empty
+                front = rear = nullptr;
                 return nullptr;
             }
             front = new Node(obj.front->data);
@@ -56,6 +60,7 @@ class Linked_list{
                 curr = curr->next;
                 temp = temp->next;
             }
+            rear = curr;
             return *this;
         }
         ~Linked_list(){
