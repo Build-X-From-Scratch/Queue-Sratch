@@ -25,6 +25,10 @@ class Bank{
             this->Queue = new int[capacity];
             this->arr = new std::string[capacity];
         }
+        ~Bank(){
+            delete[] Queue;
+            delete[] arr;
+        }
     private: //abstraksi getter
         int get_top_pid()const noexcept{
             return Queue[rear];
